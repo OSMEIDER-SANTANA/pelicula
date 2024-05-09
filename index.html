@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>peliculas</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <input class="pelicula" type="text" placeholder="Ingresa tu Pelicula" required autofocus>
+    <input class="genero" type="text" placeholder="Ingresa tu Genero" required autofocus>
+    <button class="boton" value="Registrarme">Enviar</button>
+    <button class="limpiar" value="Registrarme">Limpiar</button>
+
+    <div class="resultados">
+
+    </div>
+    
+
+    <script>
+        const pelicula = $(".pelicula");
+        const genero = $(".genero");
+        const boton = $(".boton");
+        const limpiar = $(".limpiar");
+
+        boton.click(function (){
+            $.ajax({
+                type: "POST",
+                url: "guardar.php",
+                data: { pelicula: pelicula.val(), genero: genero.val()
+                },
+                success: function (response) {
+                    $(".resultados").html(response)
+            },
+            });
+        }
+    );
+    </script>
+
+</body>
+</html>
