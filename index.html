@@ -1,41 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>peliculas</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-</head>
-<body>
-    <input class="pelicula" type="text" placeholder="Ingresa tu Pelicula" required autofocus>
-    <input class="genero" type="text" placeholder="Ingresa tu Genero" required autofocus>
-    <button class="boton" value="Registrarme">Enviar</button>
-    <button class="limpiar" value="Registrarme">Limpiar</button>
+  </head>
+  <body>
+    <input class="pelicula" type="text" />
+    <input class="genero" type="text" />
+    <button class="boton">Enviar</button>
 
-    <div class="resultados">
+    <button class="pop">Mostrar</button>
 
-    </div>
-    
+    <div class="resultados"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@simondmc/popup-js@1.4.2/popup.min.js"></script>
     <script>
-        const pelicula = $(".pelicula");
-        const genero = $(".genero");
-        const boton = $(".boton");
-        const limpiar = $(".limpiar");
+      const pelicula = $(".pelicula");
+      const genero = $(".genero");
+      const boton = $(".boton");
+      const myPopup = new Popup({
+        id: "my-popup",
+        title: "Mi primer popup",
+        content: `
+          <button>Aceptar</button>
+          <button>Cancelar</button>
+        `,
+      });
 
-        boton.click(function (){
-            $.ajax({
-                type: "POST",
-                url: "guardar.php",
-                data: { pelicula: pelicula.val(), genero: genero.val()
-                },
-                success: function (response) {
-                    $(".resultados").html(response)
-            },
-            });
+      $(".pop").click(
+        function(){
+          myPopup.show();
         }
-    );
-    </script>
+      )
 
-</body>
+      $.ajax({
+        type: "GET",
+        url: "imprimir.php",
+        success: function (response) {
+          $(".resultados").html(response);
+        },
+      });
+
+      $(document).on("click", "#borrar", function () {
+        $.ajax({
+          type: "POST",
+          url: "borrar.php",
+          data: { id: $(this).parent("div").attr("id") },
+          success: function (response) {
+            $(".resultados").html(response);
+          },
+        });
+      });
+
+      boton.click(function () {
+        $.ajax({
+          type: "POST",
+          url: "guardar.php",
+          data: { pelicula: pelicula.val(), genero: genero.val() },
+          success: function (response) {
+            $(".resultados").html(response);
+          },
+        });
+      });
+    </script>
+  </body>
 </html>
